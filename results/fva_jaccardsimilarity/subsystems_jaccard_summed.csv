@@ -1,0 +1,49 @@
+subsystem,lungtumour_vs_lungmetastasis_origin_breast,nonlungmetastasis_vs_lungmetastasis(origin_breast),lungtumour_vs_brainmetasis,MDA_MB_231_vs_nonlungmetastasis(origin_breast),MDA_MB_231_vs_lungmetastasis(origin_breast)
+Acyl-CoA hydrolysis,4.5e-08,0.0,0.0,0.0,0.0
+Acylglycerides metabolism,0.0,0.0,0.0,0.0,0.0
+"Alanine, aspartate and glutamate metabolism",0.0,0.0,0.0,0.0,0.0
+Amino sugar and nucleotide sugar metabolism,0.0,0.0,0.0,0.0,0.0
+Aminoacyl-tRNA biosynthesis,0.0,0.0,0.0,0.0,0.0
+Arginine and proline metabolism,0.0,1.0,0.224517857997706,1.0,1.0
+Artificial reactions,0.0,0.0,0.0,0.0,0.0
+Bile acid biosynthesis,1.911439898124272,0.0,0.41879716918236054,0.0,0.0
+Biotin metabolism,0.0,0.0,0.0,0.0,0.0
+Carnitine shuttle (cytosolic),2.00000013,2.0,2.3633245836882493,2.0,2.0
+Carnitine shuttle (mitochondrial),0.0,0.0,0.0,0.0,0.0
+Cysteine and methionine metabolism,0.0495850838041648,1.38121296291524,0.6893502537029305,0.298398164310174,0.432081326083652
+Exchange/demand reactions,6.452098883364349,18.757881934789513,20.591303571933558,10.084740070008024,9.195378593840594
+Fatty acid activation (cytosolic),2.875e-06,0.931292292748379,0.878009872111948,0.236466590181773,0.950727507376393
+Fatty acid biosynthesis,2.0,2.0,1.0,1.0,1.0
+Fatty acid oxidation,3.999974134163148,3.999998369232003,2.000000000002988,2.999408680137018,2.999407050333326
+Folate metabolism,2.87423e-05,2.0,2.2529717696628984,0.0,0.0
+Galactose metabolism,1.38e-06,0.1591020948310218,2.773738950608623,5.28e-09,2.799e-06
+Glutathione metabolism,0.0,0.0,0.0,0.0,0.0
+Glycerophospholipid metabolism,0.0,0.0,0.0,0.0,0.0
+"Glycine, serine and threonine metabolism",1.0,2.59e-07,1.0,0.0861158340546363,2.23e-06
+Glycolysis / Gluconeogenesis,3.790314294476084,5.588207997865888,4.630758825490349,3.400630351991715,3.683363989496298
+Histidine metabolism,0.0,1.0,0.504682341949621,0.0,0.0
+Miscellaneous,4.59e-08,0.0,1.6199059360915538,0.0,0.0
+Nicotinate and nicotinamide metabolism,0.0,0.0,0.0,0.0,0.0
+Nucleotide metabolism,0.03345493947682994,0.805847713119905,1.3312727569732568,0.1276935066062625,0.33027412066860007
+Oxidative phosphorylation,2.813e-07,0.587731579996699,7.31472258783254e-07,0.341369022979466,0.580824707396842
+Pentose and glucuronate interconversions,2.06e-07,0.88498338020588,0.537695815204445,4.74e-07,4.19e-07
+Pentose phosphate pathway,2.0848836458584032,4.119423998451827,5.952333540141378,1.000001538,1.887140095434644
+Peptide metabolism,0.0002110103,0.0,0.698464689482182,0.0,0.0
+"Phenylalanine, tyrosine and tryptophan biosynthesis",0.0,0.0,0.0,0.0,0.0
+Pool reactions,9e-08,0.0,0.0,0.0,0.0
+Purine metabolism,1.4045626983483348,3.716692410853168,3.04971467758717,2.090455160486458,2.3199966906609584
+Pyrimidine metabolism,1.41502941733013,0.0,1.6746593436121273,2.62e-08,1.548144639687699
+ROS detoxification,8.05e-07,0.501004608487696,1.8898625879457283,0.344035546450632,0.17236339425535
+Retinol metabolism,0.0,0.0,0.0,0.0,0.0
+Riboflavin metabolism,0.0,0.0,0.0,0.0,0.0
+Sphingolipid metabolism,1.35e-07,0.0,8.96853538184561e-08,0.199180140557631,0.0
+Starch and sucrose metabolism,3.22e-06,0.0,6.472057551420154,0.0,0.0
+Steroid metabolism,0.0,0.0,0.0,0.0,0.0
+Thiamine metabolism,0.0,0.0,0.0,0.0,0.0
+Transport reactions,11.32951654733383,20.996409646180147,24.372012438783347,11.738838382729082,10.92142995872541
+Tricarboxylic acid cycle and glyoxylate/dicarboxylate metabolism,0.0,0.0,3.74408056721238e-07,0.0,0.0
+"Valine, leucine, and isoleucine metabolism",0.0,0.0,3.7440805611777397e-07,0.0,0.0
+Vitamin A metabolism,0.0,0.0,0.0,0.0,0.0
+Vitamin B12 metabolism,0.0,0.0,0.0,0.0,0.0
+Vitamin D metabolism,0.0,0.0,0.0,0.0,0.0
+nan,3.0000300242,66.64596829483696,0.0,60.25865700704065,59.28620633015619
