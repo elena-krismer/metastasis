@@ -1,4 +1,4 @@
-reaction	jaccardindex	KolmogorovSmirnow	KolmogorovSmirenow_pvalue	T - test_pvalue	Anova_pvalue	Wilcoxon_Mann_Whitney_pvalue	Mean	Std	Mode	Median	skew	kurt	Ttest_H	Ttest_pvalue	minFlux_lungmetastasis	minFlux_brainmetastasis	maxFlux_lungmetastasis	maxFlux_brainmetastasis	perc_brainmet/breastcancer	perc_breastcancer/brainmet
+reaction	jaccardindex	KolmogorovSmirnow	KolmogorovSmirenow_pvalue	T - test_pvalue	Anova_pvalue	Wilcoxon_Mann_Whitney_pvalue	Mean	Std	Mode	Median	skew	kurt	Ttest_H	Ttest_pvalue	minFlux_brainmetastasis	minFlux_breastcancer	maxFlux_brainmetastasis	maxFlux_breastcancer	perc_brainmet/breastcancer	perc_breastcancer/brainmet
 Acyl-CoA hydrolysis	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	
 HMR_0272	0.49557	0.2894	0.14496	1.2555e-205	7.7119e-209	9.292e-210	0.08847__0.11351	0.05418__0.059169	0__0	0.083064__0.11081	0.689__0.50447	3.6412__3.7694	1	1.2555e-205	0.045888	0.070525	0.12371	0.15321	0.74961	1.334
 Acylglycerides metabolism	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	
