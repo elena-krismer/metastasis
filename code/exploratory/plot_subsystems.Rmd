@@ -1,0 +1,199 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r}
+mutate_dataframe <- function(df, filter = FALSE) {
+  # if(filer):
+  # df <- df %>% filter(df$prop1_x >= 1.5| df$prop1_y >= 1.5 | df$prop2_x >= 1.5 | df$prop2_y <= 0.5)
+
+  length_col <- length(df$maxbrain)
+  value <- c(
+    df$minbrain, df$maxbrain, df$min_breast_x,
+    df$max_breast_x, df$minlung, df$maxlung
+  )
+  cell_type <- c(
+    rep("brain", length_col * 2), rep("breast", length_col * 2),
+    rep("lung", length_col * 2)
+  )
+  reaction <- c(rep(df$reaction, 6))
+  min_max <- c(
+    rep("min_value", length_col), rep("max_value", length_col),
+    rep("min_value", length_col), rep("max_value", length_col),
+    rep("min_value", length_col), rep("max_value", length_col)
+  )
+
+  df_new <- data_frame(value, reaction, min_max, cell_type)
+  return(df_new)
+}
+
+dumbbell_plot <- function(df, titletext) {
+  # df <- read.csv(path, row.names = NULL, header = TRUE, sep =";")
+  # df$value <- gsub(",", ".", df$value) %>% as.numeric()
+  df$reaction_cell <- paste(df$reaction, df$cell_type)
+
+  plot <- df %>%
+    ggplot(aes(x = value, y = reaction_cell)) +
+    geom_line(aes(color = cell_type)) +
+    geom_point(aes(color = cell_type)) +
+    labs(y = "reaction", x = "flux", title = titletext)
+  return(plot)
+}
+```
+
+```
+  
+ 
+orotidine_list = ['HMR_4577', 'OROT5Ptr', 'EX_orot5p_e_']   
+orotate_list = ['HMR_4875', 'HMR_4577', 'HMR_4575', 'HMR_4875', 'HMR_9690',
+'OROTGLUt', 'OROte']
+df1 = subsystem_df('/Users/s202425/Documents/GitHub/metastasis/results/sampling_statisticalcomparison/subsystems_brainmetastasis_vs_breastcancer.tsv', orotate_list, "brain")
+df2 = subsystem_df('/Users/s202425/Documents/GitHub/metastasis/results/sampling_statisticalcomparison/subsystems_lungmetastasis_vs_breastcancer.tsv', orotate_list, "lung")
+
+orotate_df = dataframe_merge(df1, df2)
+```
+
+
+```{r}
+# load python script
+source_python("/Users/s202425/Documents/GitHub/metastasis/code/subset_df.py")
+```
+
+
+```{r}
+orotidine_list <- list("HMR_4577", "OROT5Ptr", "EX_orot5p_e_")
+orotate_list <- list(
+  "HMR_4875", "HMR_4577", "HMR_4575", "HMR_4875", "HMR_9690",
+  "OROTGLUt", "OROte"
+)
+
+path1 <- "/Users/s202425/Documents/GitHub/metastasis/results/sampling_statisticalcomparison/subsystems_brainmetastasis_vs_breastcancer.tsv"
+path2 <- "/Users/s202425/Documents/GitHub/metastasis/results/sampling_statisticalcomparison/subsystems_lungmetastasis_vs_breastcancer.tsv"
+subsystem_list <- orotate_list
+celltype1 <- "brain"
+celltype2 <- "lung"
+
+orotate_df <- subset_merge(path1, path2, subsystem_list, celltype1, celltype2)
+```
+
+```{r}
+orotate_df <- mutate_dataframe(orotate_df)
+dumbbell_plot(orotate_df, "Orotate")
+```
+
+
+## Glutamine 
+
+```{r}
+
+glutamine_exchange <- list("HMR_5078")
+glutamine_df <- subset_merge(path1, path2, glutamine_exchange, celltype1, celltype2)
+glutamine_df <- mutate_dataframe(glutamine_df)
+dumbbell_plot(glutamine_df, "Glutamine")
+```
+
+## Lactate
+
+
+```{r}
+
+lactate_exchange <- list("HMR_9135")
+lactate_df <- subset_merge(path1, path2, lactate_exchange, celltype1, celltype2)
+lactate_df <- mutate_dataframe(lactate_df)
+dumbbell_plot(lactate_df, "Lactate")
+```
+
+
+## Orotidine
+
+```{r}
+orotidine_list <- list("HMR_4577", "OROT5Ptr", "EX_orot5p_e_")
+orotidine_df <- subset_merge(path1, path2, orotidine_list, celltype1, celltype2)
+orotidine_df <- mutate_dataframe(orotidine_df)
+dumbbell_plot(orotidine_df, "Orotidine")
+```
+
+
+```{r}
+pyrimidine <- list(
+  "HMR_4006", "HMR_4028", "HMR_4030",
+  "HMR_4670",
+  "HMR_4673",
+  "HMR_4675",
+  "HMR_6614",
+  "HMR_6615",
+  "HMR_6616",
+  "HMR_4635",
+  "HMR_3793",
+  "HMR_3931",
+  "HMR_3969",
+  "HMR_3970",
+  "HMR_4008",
+  "HMR_4032",
+  "HMR_4034",
+  "HMR_4036",
+  "HMR_4050",
+  "HMR_4056",
+  "HMR_4059",
+  "HMR_4060",
+  "HMR_4127",
+  "HMR_4177",
+  "HMR_4179",
+  "HMR_4182",
+  "HMR_4183",
+  "HMR_4192",
+  "HMR_4194",
+  "HMR_4210",
+  "HMR_4211",
+  "HMR_4343",
+  "HMR_4345",
+  "HMR_4346",
+  "HMR_4470",
+  "HMR_4471",
+  "HMR_4472",
+  "HMR_4484",
+  "HMR_4485",
+  "HMR_4510",
+  "HMR_4512",
+  "HMR_4513",
+  "HMR_4514",
+  "HMR_4577",
+  "HMR_4579",
+  "HMR_4580",
+  "HMR_4608",
+  "HMR_4575",
+  "HMR_4637",
+  "HMR_4642",
+  "HMR_4643",
+  "HMR_4644",
+  "HMR_4672",
+  "HMR_4676",
+  "HMR_4736",
+  "HMR_4819",
+  "HMR_5299",
+  "HMR_5352",
+  "HMR_5415",
+  "HMR_5416",
+  "HMR_5417",
+  "HMR_6612",
+  "HMR_6613",
+  "HMR_6621",
+  "HMR_6622",
+  "HMR_6623",
+  "HMR_6624",
+  "HMR_6627",
+  "HMR_7744",
+  "HMR_8072",
+  "HMR_8637",
+  "BUP2",
+  "r0410",
+  "r0494",
+  "r0497",
+  "RE0456M",
+  "DTMPKm",
+  "DUTPDP"
+)
+```
+
+
