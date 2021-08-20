@@ -152,7 +152,7 @@ for pos = 1:length(commonreaction)
    close all;
 
    perc1 = sampleStats.median(1)/sampleStats.median(2);
-   perc2 = sampleStats.median(1)/sampleStats.median(2);
+   perc2 = sampleStats.median(2)/sampleStats.median(1);
 
    stat_results = [string(jaccard_index),string(mean(stats.ks)),string(mean(pVals.ks)),...
        string(pvalue_ttest), string(p_anova), string(p_ranksum), ...
