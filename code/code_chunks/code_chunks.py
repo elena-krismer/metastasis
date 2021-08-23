@@ -1,6 +1,10 @@
 import csv 
 import pandas as pd
 
+"""
+subsetting dataframe in subsystems for rstudio
+"""
+
 def subsystem_df(path, subsystem_list, cell_type):
     with open(path, 'r') as file:
         min_cell_type = 'min' + cell_type
@@ -32,5 +36,34 @@ def subset_merge(path1, path2, subsystem_list,celltype1, celltype2):
   df2 = subsystem_df(path2, subsystem_list, celltype2)
   df = dataframe_merge(df1, df2)
   return df
+
+
+
+import urllib.request as urllib2
+import re
+import pickle
+import csv
+
+"""
+load list from pickle for Rstudio
+"""
+# save pickle object to obj folder
+def save_obj(obj, name):
+    with open('../../obj/dicts/' + name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, protocol=2)
+
+
+def load_obj(name):
+    with open('../../obj/' + name + '.pkl', 'rb') as f:
+        return pickle.load(f)
+
+# get list of low or high proteins from brain
+def load_gene_list(level):
+    brain_gene_expression_dict = load_obj('brain_gene_expression_dict')
+    if level == "low":
+        list = brain_gene_expression_dict.get("low_expression")
+    else:
+        list = brain_gene_expression_dict.get("high_expression")
+    return list
  
 
