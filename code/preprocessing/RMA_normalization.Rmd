@@ -1,0 +1,43 @@
+---
+title: "rma normalization"
+output: html_document
+---
+
+## RMA Normalization of GSE2603
+
+```{r cars}
+setwd("~/Documents/GitHub/metastasis/data/gene_expression/raw/GSE2603_RAW.tar")
+```
+
+```{r}
+untar("GSE2603_RAW.tar", exdir = "data")
+cels = list.files("data/", pattern = "CEL")
+# sometiles, it is 'CEL', you need to check it first
+sapply(paste("data", cels, sep = "/"), gunzip)
+cels = list.files("data/", pattern = "cel")
+```
+
+
+```{r}
+library(affy)
+library(hgu133a.db)
+library(hgu133acdf)
+
+# Set working directory for normalization
+setwd("~/Documents/GitHub/metastasis/data/gene_expression/raw/GSE2603/data/")
+raw.data = ReadAffy(verbose = FALSE, filenames = cels, cdfname = "hgu133acdf")
+
+# perform RMA normalization (log2)
+data.rma.norm = rma(raw.data)
+rma = exprs(data.rma.norm)
+
+# Take a look at the result (first 5 rows and 5 columes)
+rma[1:5, 1:5]
+
+```
+
+```{r}
+# Write RMA-normalized, mapped data to file
+write.table(rma, file = "GSE2603_RMA.txt", quote = FALSE, sep = "\t")
+
+```
