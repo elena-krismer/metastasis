@@ -1,0 +1,69 @@
+---
+title: "gene_expression_brain"
+output: html_document
+---
+
+```{r}
+library(reticulate)
+source_python("~/Documents/GitHub/metastasis/code/code_chunks/code_chunks.py")
+
+low_df = load_brain_dataframe("low")
+high_df = load_brain_dataframe("high")
+```
+
+```{r}
+library(ggplot2)
+library(viridis)
+
+low_df <- pivot_longer(low_df, cols = starts_with("value"), names_to = "sample", values_to = "value")
+high_df <- pivot_longer(high_df, cols = starts_with("value"), names_to = "sample", values_to = "value")
+```
+
+Compare Protein levels Data from Brain with Gene Expression Data from Microarray.
+
+
+```{r}
+ggplot(low_df, aes(sample, geneID,fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "red") +
+  coord_fixed() +
+  labs(title = "Geneexpression of low expressed Proteins", subtitle = "in Brain Metastasis")
+
+````
+
+ 
+## 'HMR_3213'	'm02480m  -> m00166m '	'Valine, leucine, and isoleucine metabolism'	''	'ENSG00000124370'
+
+## 'HMR_1312'	'm02794c  -> m02786c '	'Prostaglandin biosynthesis'	''	'ENSG00000110958 or ENSG00000148334 or ENSG00000148344'
+
+## 'HMR_6916'	'm01285m + m02751m + 3 m02039i  -> m01371m + 2 m02039m + m02040m '	'Oxidative phosphorylation'	''	'ENSG00000099624 and ENSG00000110955 and ENSG00000116459 and ENSG00000124172 and ENSG00000135390 and ENSG00000152234 and ENSG00000154518 and ENSG00000154723 and ENSG00000156411 and ENSG00000159199 and ENSG00000165629 and ENSG00000167283 and ENSG00000167863 and ENSG00000169020 and ENSG00000173915 and ENSG00000198899 and ENSG00000228253 and ENSG00000241468 and ENSG00000241837'
+ 
+
+```{r}
+#
+ggplot(high_df, aes(sample, geneID,fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "red") +
+  coord_fixed() +
+  labs(title = "Geneexpression of highly expressed Proteins", subtitle = "in Brain Metastasis")
+
+```
+
+## ENSG00000130066 Diamine acetyltransferase 1 Enzyme which catalyzes the acetylation of polyamines
+'HMR_4476','m01169c + m01285c + m02039c  <=> m01371c + m01683c 
+'Pentose phosphate pathway'
+ - High Protein Expression
+ - High Gene Expression
+ - Flux HMR_4476: (min:434 max:663)[https://github.com/elena-krismer/metastasis/blob/main/results/sampling_statisticalcomparison/subsystems_brainmetastasis_vs_breastcancer.tsv]
+
+
+## ENSG00000004779 Acyl carrier protein, mitochondrial
+HMR_6921','5 m02039m + m02553m + m03103m  -> m02552m + m03102m + 4 m02039i 
+'Oxidative phosphorylation'
+ - High Protein Expression
+ - High Gene Expression
+ - Flux HMR_6921: min: 80 max: 170 
+ 
+
+### highly expressed genes
+ENSG00000177954, ENSG00000177600, ENSG00000172809 -> ribosomal subunits 
