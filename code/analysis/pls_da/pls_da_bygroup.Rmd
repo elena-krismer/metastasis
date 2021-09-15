@@ -1,0 +1,75 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+brain <- read.csv('~/Documents/GitHub/metastasis/results/sampling/sampling_brain_metastasis_100.csv')# %>% 
+
+brain_l <- nrow(brain)
+brain$group <- c(rep('brain', brain_l))
+
+
+breast <- read.csv('~/Documents/GitHub/metastasis/results/sampling/sampling_breast_cancer_100.csv') # %>% 
+
+breast_l <- nrow(breast)
+breast$group <- c(rep('breast', breast_l))
+
+lung <- read.csv('~/Documents/GitHub/metastasis/results/sampling/sampling_lung_metastasis_100.csv') #%>% 
+
+lung_l <- nrow(lung)
+lung$group <- c(rep('lung', lung_l))
+
+common_react <- Reduce(intersect, list(colnames(lung),colnames(brain),colnames(breast)))
+# combine all matrices
+flux <- rbind(brain[common_react], breast[common_react], lung[common_react])
+
+```
+
+```{r}
+library(mixOmics)
+# create vector with groups
+group <- flux$group
+flux$group <- NULL
+
+# normalize data
+flux <- scale(flux, center=FALSE, scale=colSums(flux))
+
+# keep X selects 50 variables of each
+pls_result <- mixOmics::splsda(flux, group, keepX = c(3000:3000)) 
+```
+```{r}
+pls_result <- mixOmics::splsda(flux, group, keepX = c(5305:5305
+                                                      ))
+```
+
+
+```{r}
+plotIndiv(pls_result, legend = TRUE)
+```
+
+```{r}
+plotVar(pls_result)
+```
+
+```{r}
+plotVar(pls_result, cutoff=0.9)
+```
+
+```{r}
+plotLoadings(pls_result, contrib = 'max', method = 'mean')
+```
+```{r}
+plotIndiv(pls_result, ind.names = FALSE, legend=TRUE,
+          ellipse = TRUE, star = TRUE, title = 'sPLS-DA on SRBCT',
+          X.label = 'PLS-DA 1', Y.label = 'PLS-DA 2')
+```
+```{r}
+pls_result2 <- splsda(flux, group, ncomp=3, keepX=c(15,10,5))
+```
+
+```{r}
+plotLoadings(pls_result2, contrib = 'max', method = 'mean')
+```
+
+

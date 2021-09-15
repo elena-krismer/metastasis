@@ -1,0 +1,171 @@
+---
+title: "PLS-DA-Analysis"
+output: html_document
+---
+
+## PLS - DA Analysis 
+
+```{r}
+library(dplyr)
+library(ropls)
+```
+
+
+## Normalize data!
+
+```{r}
+df <- read.csv('~/Documents/GitHub/metastasis/data/pls_da_analysis/subsystem_array.csv', sep = ";")
+system<- df[[1]]  
+
+X <- read.csv('~/Documents/GitHub/metastasis/data/pls_da_analysis/AllTraumaSummaryTable,csv') %>% 
+  as.matrix() %>% 
+  # normalize data
+  scale()
+```
+
+```{r}
+pls_da_plot <- plsda(X, system, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE, ellipse = TRUE, legend = TRUE)
+```
+
+```{r}
+subsystem<- df[[2]]  
+pls_da_plot <- plsda(X, subsystem, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE, ellipse = TRUE, legend = TRUE)
+```
+
+```{r}
+subsystem<- df[[2]]  
+pls_da_plot <- plsda(X, subsystem, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE, ellipse = TRUE, legend = FALSE)
+```
+
+```{r}
+subsystem<- df[[2]][1:40]  
+pls_da_plot <- plsda(X[1:40,], subsystem, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE, ellipse = TRUE, legend = TRUE)
+```
+
+```{r}
+subsystem<- df[[2]][40:60]  
+pls_da_plot <- plsda(X[40:60,], subsystem, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE, ellipse = TRUE, legend = TRUE)
+```
+```{r}
+subsystem<- df[[2]][60:80]  
+pls_da_plot <- plsda(X[60:80,], subsystem, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE, ellipse = TRUE, legend = TRUE)
+```
+```{r}
+X <- read.csv('~/Documents/GitHub/metastasis/data/pls_da_analysis/AllTraumaSummaryTable,csv') %>% 
+  as.matrix() %>% 
+  # normalize data
+  scale()
+X <- X%>% t()
+subsystem<- c("x", "d", "s")
+pls_da_plot <- plsda(X, subsystem, ncomp = 2)
+plotIndiv(pls_da_plot, ind.names = TRUE,  legend = TRUE)
+```
+```{r}
+df <- read.csv('~/Documents/GitHub/metastasis/data/pls_da_analysis/subsystem_array.csv', sep = ";")
+system<- df[[1]]  
+subsystem <- df[[2]]
+
+X <- read.csv('~/Documents/GitHub/metastasis/data/pls_da_analysis/AllTraumaSummaryTable,csv') %>% 
+  as.matrix() %>% 
+  # normalize data
+  scale()
+
+system_plsda <- mdatools::plsda(X, system, 3, cv = 1)
+subsystem_plsda <- mdatools::plsda(X, subsystem, 3, cv = 1)
+
+```
+```{r}
+summary(system_plsda)
+```
+
+```{r}
+summary(subsystem_plsda)
+```
+
+
+```{r}
+library(mdatools)
+#X
+
+
+Xt <- X %>% t()
+Xt[subsystem,]
+#rownames(Xt) <- subsystem
+celltype <- c("brain", "breast", "x")
+m.all = mdatools::plsda(X%>%t(), celltype, 1
+              , cv = 2)
+summary(m.all)
+```
+```{r}
+lung <-X[,1]
+brain  <-X[,2]
+breast  <-X[,3]
+data1 <- rbind(lung, brain, breast)
+colnames(data1) <- subsystem
+```
+
+```{r}
+pivot_longer(data1, )
+group<- c("lung", "brain", "breast")
+df <- 
+df <-  as.data.frame(data1, row.names= group) %>%tibble::rownames_to_column("group")
+df <- df %>% as_data_frame()%>% pivot_longer(!group,
+   names_to = "subsystem",
+   values_to = "value",
+   values_drop_na = TRUE
+ )
+
+df$subsystem %>% gsub( ".", "") %>% 
+df$subsystem <- gsub('[[:digit:]]+', '', df$subsystem) 
+df$subsystem <- gsub('[.]', '', df$subsystem)
+
+df$number <- c(1:567)
+df$group_n <- paste(df$group, df$number)
+```
+
+```{r}
+df$number <- NULL
+df$group_n <- NULL
+df2 <- df %>%
+  group_by(subsystem) %>%
+  mutate(row = row_number()) %>%
+  tidyr::pivot_wider(names_from = subsystem, values_from = value) %>%
+  select(-row)
+
+column_to_rownames(df2, var = "group")
+  
+
+rownames(df2) <- c(1:74)
+
+filter(df2, rowSums(is.na(df2[, names(mtcars) != "group"])) != ncol(df2)) 
+df3 <- df2
+df3$group <- NULL
+
+m.all = mdatools::plsda(df3, df2$group, 1
+              , cv = 2)
+```
+
+```{r}
+df <- read.csv('~/Documents/GitHub/metastasis/data/pls_da_analysis/subsystem_array.csv', sep = ";")
+tasks<- df[[3]]  
+```
+
+```{r}
+Xt <- X %>% t()
+m.all = mdatools::plsda(Xt, tasks, 2, cv = 2)
+```
+
+
+
+
+```{r}
+m.all = mdatools::plsda(data1, celltype, 2
+              , cv = 2)
+```
+

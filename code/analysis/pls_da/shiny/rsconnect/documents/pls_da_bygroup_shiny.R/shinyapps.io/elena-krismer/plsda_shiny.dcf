@@ -1,0 +1,13 @@
+name: plsda_shiny
+title: plsda_shiny
+username:
+account: elena-krismer
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4657177
+bundleId: 5035387
+url: https://elena-krismer.shinyapps.io/plsda_shiny/
+when: 1631704120.97264
+lastSyncTime: 1631704120.97266
+asMultiple: FALSE
+asStatic: FALSE
