@@ -39,5 +39,44 @@ rma[1:5, 1:5]
 ```{r}
 # Write RMA-normalized, mapped data to file
 write.table(rma, file = "GSE2603_RMA.txt", quote = FALSE, sep = "\t")
+```
 
+## RMA Normalization of GSE13276 -  brain expression data
+
+```{r cars}
+setwd("~/Documents/GitHub/metastasis/data/gene_expression/raw/GSE13276/")
+```
+
+```{r}
+library(affy)
+library(hgu133a.db)
+library(hgu133acdf)
+library(GEOquery)
+untar("GSE13276_RAW.tar", exdir = "data")
+cels = list.files("data/", pattern = "CEL")
+# sometiles, it is 'CEL', you need to check it first
+sapply(paste("data", cels, sep = "/"), gunzip)
+cels = list.files("data/", pattern = "cel")
+```
+
+
+```{r}
+
+
+# Set working directory for normalization
+setwd("~/Documents/GitHub/metastasis/data/gene_expression/raw/GSE13276/data/")
+raw.data = ReadAffy(verbose = FALSE, filenames = cels, cdfname = "hgu133acdf")
+
+# perform RMA normalization (log2)
+data.rma.norm = rma(raw.data)
+rma = exprs(data.rma.norm)
+
+# Take a look at the result (first 5 rows and 5 columes)
+rma[1:5, 1:5]
+
+```
+
+```{r}
+# Write RMA-normalized, mapped data to file
+write.table(rma, file = "GSE13276_RMA.txt", quote = FALSE, sep = "\t")
 ```

@@ -24,7 +24,7 @@ class model:
         # expression data
         self.value = value
 
-
+"""
 # dict for Affymetrix Human Genome U133 Plus 2.0 Array - GeneID
 plusU133_dict = {}
 
@@ -35,10 +35,10 @@ with open('../../data/misc/geneID_PlusU133.txt', 'r') as csv_file:
             plusU133_dict[row[1]] = row[0]
 
 save_obj(plusU133_dict, "plusU133_dict")
-
+"""
 aU133 = load_obj("aU133_dict")
 
-
+"""
 # tranlate affymetrix ID to geneID
 flag = False
 with gzip.open('../../data/gene_expression/raw/GSE11078_breast.txt.gz', 'rt') as csv_file:
@@ -58,10 +58,10 @@ with gzip.open('../../data/gene_expression/raw/GSE11078_breast.txt.gz', 'rt') as
                 flag = True
     output.close()
     csv_file.close()
+"""
 
-
-with open('../../data/gene_expression/GSE2603_RMA.txt', 'r') as csv_file:
-    with open("../../data/gene_expression/GS2603_RMA_geneID.txt", "w") as output:
+with open('../../../data/gene_expression/GSE2603_RMA.txt', 'r') as csv_file:
+    with open("../../../data/gene_expression/GS2603_RMA_geneID.txt", "w") as output:
         for row in csv.reader(csv_file, delimiter='\t'):
             if len(row) == 0:
                 continue
@@ -74,7 +74,7 @@ with open('../../data/gene_expression/GSE2603_RMA.txt', 'r') as csv_file:
     csv_file.close()
 
 # load translated expression data
-df = pd.read_csv('../../data/gene_expression/GSE11078.txt', delimiter="\t")
+df = pd.read_csv('../../../data/gene_expression/GSE11078.txt', delimiter="\t")
 df = df[df.ID_REF.str.contains("ENSG")]
 # extract the gene ID
 geneID = df.iloc[:, 0]
@@ -95,7 +95,7 @@ brain_metastasis = model('brain_metastasis', geneID.to_numpy(), mean.to_numpy())
 
 # MDA-MB cell line
 # df MDA-MB-231 cell line
-df_2 = pd.read_csv('../../data/gene_expression/GS2603_RMA_geneID.txt', delimiter="\t")
+df_2 = pd.read_csv('../../../data/gene_expression/GS2603_RMA_geneID.txt', delimiter="\t")
 print(df_2.index)
 df_2 = df_2[df_2.index.str.contains("ENSG")]
 pd.Index(df_2.columns, dtype=object)
@@ -106,8 +106,8 @@ MDA_MB_231 = model('MDA_MB_231', df_2.index.to_numpy(),
                            df_breast['mean'].to_numpy())
 
 # save as mat for matlab
-scipy.io.savemat('../../obj/models/lung_metastasis.mat', mdict={'lung_metastasis': lung_metastasis})
+scipy.io.savemat('../../../obj/models/lung_metastasis.mat', mdict={'lung_metastasis': lung_metastasis})
 
-scipy.io.savemat('../../obj/models/brain_metastasis.mat', mdict={'brain_metastasis': brain_metastasis})
+scipy.io.savemat('../../../obj/models/brain_metastasis.mat', mdict={'brain_metastasis': brain_metastasis})
 
-scipy.io.savemat('../../obj/models/MDA_MB_231.mat', mdict={'MDA_MB_231': MDA_MB_231})
+scipy.io.savemat('../../../obj/models/MDA_MB_231.mat', mdict={'MDA_MB_231': MDA_MB_231})
