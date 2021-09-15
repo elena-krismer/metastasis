@@ -1,3 +1,5 @@
 /venv/
 .DS_Store
 .idea/misc.xml
+data/gene_expression/raw/
+results/sampling/
