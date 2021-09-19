@@ -16,3 +16,12 @@ def subsystem_reactions(subsystem):
     sub_list = dict.get(subsystem)
     return sub_list
 
+# reaction description
+def get_reaction_description(humanone_reaction):
+    with open('reaction_description_dict.pkl', 'rb') as f:
+        dict = pickle.load(f)
+    description = dict.get(humanone_reaction)
+    return description
+
+
+#print(get_reaction_description("MAR04693"))
