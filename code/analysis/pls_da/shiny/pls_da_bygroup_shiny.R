@@ -4,6 +4,7 @@ library(mixOmics)
 library(reticulate)
 library(dbplyr)
 library(dplyr)
+library(glue)
 library(tidyverse)
 
 source_python("code_chunks.py")
@@ -114,6 +115,29 @@ plsda_for_subsystem <- function(subsystem, flux, groups_list, ellipse_logical = 
   return(pls_result)
 }
 
+###############################################################################
+# ttest
+###############################################################################
+
+# return tt-test results in html format
+ttest_results <- function(groups_list, reaction, flux) {
+  flux <- flux[, colnames(flux) %in% c(reaction, "group")] %>% as.data.frame()
+  html_output <- glue("<title>{reaction} T-test comparison </title><br>")
+  for (group1 in groups_list) {
+    for (group2 in groups_list) {
+      comparisongroups <- glue("{group1} vs. {group2}<br>")
+      sample1 <- flux[flux$group == group1, ]
+      sample2 <- flux[flux$group == group2, ]
+      # ttest remove group names
+      results <- t.test(as.vector(sample1[1]), as.vector(sample2[1]))
+      statistic_string <- toString(results$statistic)
+      results_string <- glue("<p>P-value: {results$p.value} <span class='tab'></span> Statistic:  {statistic_string}<p> <br><br>")
+      html_output <- paste(html_output, comparisongroups, results_string)
+    }
+  }
+  return(HTML(html_output))
+}
+
 
 ###############################################################################
 # Shiny
@@ -126,49 +150,75 @@ list_subsystem <- list_subsystems()
 groups <- c(
   "Brain metastasis", "Lung metastasis", "Breast cancer",
   "Brain tissue", "Lung tissue", "Breast tissue",
-  "Glioblastoma","GBM surrounding tissue", "Ependymoma", 
+  "Glioblastoma", "GBM surrounding tissue", "Ependymoma",
   "Medullablastoma", "Pilocyticastrocytoma"
 )
+
 
 
 ui <- fluidPage(
   titlePanel("PLS_DA"),
   sidebarLayout(
-  sidebarPanel(
-    tags$form(
-    checkboxGroupInput("group", "Select groups", groups),
-    selectInput("subsystem", "Select subsystem", list_subsystem),
-    sliderInput("cutoff", "Cut off  Variables with correlations below this cutoff in absolute value are not plotted ", value = 0.9, min = 0, max = 1),
-    #textInput("reaction", "Get reaction description"),
+    # ----------------------------------------------------------------------------
+    # Side bar Panel
+    # ----------------------------------------------------------------------------
+    sidebarPanel(
+      tags$form(
+        checkboxGroupInput("group", "Select groups", groups),
+        selectInput("subsystem", "Select subsystem", list_subsystem),
+        sliderInput("cutoff", "Cut off  Variables with correlations below this cutoff in absolute value are not plotted ", value = 0.9, min = 0, max = 1)
+      ),
+      tags$form(
+        textInput("reaction", "Get reaction description", "MAR06493"),
+        actionButton("button", strong("Submit"))
+      ),
+      tags$form(
+        h4(textOutput("reac")),
+        h4(htmlOutput("description"))
+      )
     ),
-    tags$form(
-      textInput("reaction", "Get reaction description", "MAR06493"),
-      actionButton("button", strong("Submit"))
-    ),
-    tags$form(
-      h5(textOutput("reac")),
-      h5(textOutput("description"))
-    )
-  ),
-  mainPanel(
-    tabsetPanel(type = "tabs",
-                tabPanel("Plot", plotOutput("plsda_samples"),
-                         plotOutput("plsda_var")),
-                tabPanel("Metabolic Atlas", 
-                         htmlOutput("link")))
+    # ----------------------------------------------------------------------------
+    # Main Panel
+    # ----------------------------------------------------------------------------
+    mainPanel(
+      # subsetting main panel into tabs
+      tabsetPanel(
+        type = "tabs",
+        # plots
+        tabPanel("Plot", plotOutput("plsda_samples"), plotOutput("plsda_var")),
+        # reaction description
+        tabPanel("Reaction Description", htmlOutput("table", height = 400, width = 800)),
+        # link to kegg database
+        tabPanel(
+          "KEGG", h5(strong(textOutput("keggheader"))), textOutput("keggids"),
+          textInput("reaction_search", "Reaction", "R02736"),
+          htmlOutput("link")
+        ),
+        tabPanel(
+          "Paired T-test", h5(strong(textOutput("ttestheader"))), textOutput("humanoneids"),
+          textInput("reaction_ttest", "Reaction", "MAR00193"),
+          htmlOutput("ttest_result", height = 800, width = 1600)
+        )
+      )
     )
   )
 )
 
 
- 
-server <- function(input, output) {
+
+server <- function(input, output, session) {
+  # ----------------------------------------------------------------------------
+  # PLS-DA plot
+  # ----------------------------------------------------------------------------
   output$plsda_samples <- renderPlot({
+    # get subsystem inpit
     x <- input$subsystem
+    # use selected groups for subsetting df
     g_list <- input$group
     plsda_result <- plsda_for_subsystem(x, flux, groups_list = g_list)
     plotIndiv(plsda_result, ellipse = TRUE, title = x, legend = TRUE)
   })
+  # PLS- DA PLots with variable labels
   output$plsda_var <- renderPlot({
     x <- input$subsystem
     g_list <- input$group
@@ -176,27 +226,87 @@ server <- function(input, output) {
     plsda_result <- plsda_for_subsystem(x, flux, groups_list = g_list)
     plotVar(plsda_result, cutoff = cutoff_defined)
   })
-  string <- eventReactive(input$button, {
-    x <-  get_reaction_description(input$reaction)
-    if(length(x) == 0){
-      x <- glue("https://metabolicatlas.org/explore/Human-GEM/gem-browser/reaction/{input$reaction}")
-    }
-    return(x)
-  })
+  # ----------------------------------------------------------------------------
+  # reaction description look up
+  # ----------------------------------------------------------------------------
+
   string_reac <- eventReactive(input$button, {
     return(input$reaction)
   })
   output$reac <- renderText({
     string_reac()
-  })   
-  output$description <- renderText({
-    string()
-  }) 
-  getPage<-function() {
-    return(tags$iframe(src = "https://www.genome.jp/pathway/map00190"))
+  })
+  string <- eventReactive(input$button, {
+    description <- get_reaction_description(input$reaction)
+    x <- glue('{description}<br><br><a href="https://metabolicatlas.org/explore/Human-GEM/gem-browser/reaction/{input$reaction}"> "View Reaction on Metabolic atlas"</a>')
+    return(x)
+  })
+  output$description <- renderUI({
+    HTML(string())
+  })
+
+  # ----------------------------------------------------------------------------
+  # description table
+  # ----------------------------------------------------------------------------
+  html_table_output <- function() {
+    x <- input$subsystem
+    cutoff_defined <- input$cutoff
+    plsda_result <- plsda_for_subsystem(x, flux, groups_list = input$group)
+    plotVar_data <- plotVar(plsda_result, cutoff = cutoff_defined)
+    reaction_names <- rownames(plotVar_data)
+    return(HTML(html_table(reaction_names)))
   }
-  output$link<-renderUI({
+  reaction_search_input <- output$table <- renderUI({
+    html_table_output()
+  })
+
+
+  # ----------------------------------------------------------------------------
+  # for KEGG look up
+  # ----------------------------------------------------------------------------
+  keggheader <- function() {
+    cutoff <- input$cutoff
+    header <- glue("KEGG IDs for Reaction with a correlation above: {cutoff}")
+    return(header)
+  }
+
+  output$keggheader <- renderText({
+    keggheader()
+  })
+  reaction_list <- function() {
+    x <- input$subsystem
+    cutoff_defined <- input$cutoff
+    plsda_result <- plsda_for_subsystem(x, flux, groups_list = input$group)
+    plotVar_data <- plotVar(plsda_result, cutoff = cutoff_defined)
+    reaction_names <- rownames(plotVar_data)
+    return(reaction_names)
+  }
+  output$keggids <- renderText(get_keggID(reaction_list()))
+  getPage <- function() {
+    kegg_link <- glue("https://www.genome.jp/dbget-bin/www_bget?rn:{input$reaction_search}")
+    return(tags$iframe(
+      src = kegg_link, style = "width:100%;", frameborder = "0",
+      id = "iframe", height = "500px"
+    ))
+  }
+  output$link <- renderUI({
     getPage()
+  })
+
+  # ----------------------------------------------------------------------------
+  # T-test
+  # ----------------------------------------------------------------------------
+  ttestheader <- function() {
+    cutoff <- input$cutoff
+    header <- glue("HumanOne IDs for Reaction with a correlation above: {cutoff}")
+    return(header)
+  }
+  output$ttestheader <- renderText({
+    ttestheader()
+  })
+  output$humanoneids <- renderText(reaction_list())
+  output$ttest_result <- renderUI({
+    ttest_results(groups_list = input$group, reaction = input$reaction_ttest, flux = flux)
   })
 }
 shinyApp(ui, server)

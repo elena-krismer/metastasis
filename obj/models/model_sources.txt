@@ -1,0 +1,17 @@
+GEO Accession of created models
+lung_metastasis;GSE11078;'GSM279964', 'GSM279974', 'GSM279975', 'GSM279977', 'GSM279978'
+brain_metastasis;GSE11078;'GSM279958', 'GSM279969', 'GSM279971', 'GSM279972'
+breast_cancer;GS2603;'GSM50017.CEL':'GSM50032.CEL'
+
+breast_tissue
+brain_tissue
+lung_tissue
+
+ependymoma; GSE50161; 'GSM1214834.CEL':'GSM1214879.CEL'
+glioblastoma; GSE50161;'GSM1214880.CEL':'GSM1214913.CEL'
+pilocyticastrocytoma; GSE50161; 'GSM1214949.CEL':'GSM1214963.CEL'
+medullablastoma; GSE50161; 'GSM1214915.CEL':'GSM1214935.CEL'
+
+gbm_surrounding_tissue;GSE13276;'GSM335190.CEL':'GSM335196.CEL'
+glioblastoma_corrupt;GSE13276;'GSM335185.CEL':'GSM335189.CEL'
+white_matter_corrupt;GSE13276;'GSM335197.CEL':'GSM335199.CEL'

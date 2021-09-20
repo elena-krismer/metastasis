@@ -1,0 +1,2 @@
+bigg_models_metabolites/reactions: http://bigg.ucsd.edu/static/namespace/bigg_models_reactions.txt
+human_gem_metabolites/reaction: Human-GEM  Github  https://raw.githubusercontent.com/SysBioChalmers/Human-GEM/main/model/reactions.tsv
