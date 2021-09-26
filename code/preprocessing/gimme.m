@@ -87,6 +87,7 @@ glioblastoma  = createTissueSpecificModel(humanone_model, options);
 matfile = fullfile(pathname, 'glioblastoma.mat');
 save(matfile, 'glioblastoma');
 
+
 [expressionRxns parsedGPR]= mapExpressionToReactions(humanone_model, gbm_surrounding_tissue);
 % create GIMME model 
 options.expressionRxns = expressionRxns;
@@ -94,3 +95,41 @@ options.threshold = round(prctile(expressionRxns, 25));
 gbm_surrounding_tissue  = createTissueSpecificModel(humanone_model, options);
 matfile = fullfile(pathname, 'gbm_surrounding_tissue.mat');
 save(matfile, 'gbm_surrounding_tissue');
+
+% GSE50161
+load('/Users/s202425/Documents/GitHub/metastasis/obj/models/glioblastoma_class.mat');
+load('/Users/s202425/Documents/GitHub/metastasis/obj/models/medullablastoma_class.mat');
+load('/Users/s202425/Documents/GitHub/metastasis/obj/models/pilocyticastrocytoma_class.mat');
+load('/Users/s202425/Documents/GitHub/metastasis/obj/models/ependymoma_class.mat');
+
+[expressionRxns parsedGPR]= mapExpressionToReactions(humanone_model, glioblastoma);
+% create GIMME model 
+options.expressionRxns = expressionRxns;
+options.threshold = round(prctile(expressionRxns, 25));
+glioblastoma  = createTissueSpecificModel(humanone_model, options);
+matfile = fullfile(pathname, 'glioblastoma.mat');
+save(matfile, 'glioblastoma');
+
+[expressionRxns parsedGPR]= mapExpressionToReactions(humanone_model, medullablastoma);
+% create GIMME model 
+options.expressionRxns = expressionRxns;
+options.threshold = round(prctile(expressionRxns, 25));
+medullablastoma  = createTissueSpecificModel(humanone_model, options);
+matfile = fullfile(pathname, 'medullablastoma.mat');
+save(matfile, 'medullablastoma');
+
+[expressionRxns parsedGPR]= mapExpressionToReactions(humanone_model,pilocyticastrocytoma);
+% create GIMME model 
+options.expressionRxns = expressionRxns;
+options.threshold = round(prctile(expressionRxns, 25));
+pilocyticastrocytoma  = createTissueSpecificModel(humanone_model, options);
+matfile = fullfile(pathname, 'pilocyticastrocytoma.mat');
+save(matfile, 'pilocyticastrocytoma');
+
+[expressionRxns parsedGPR]= mapExpressionToReactions(humanone_model,ependymoma);
+% create GIMME model 
+options.expressionRxns = expressionRxns;
+options.threshold = round(prctile(expressionRxns, 25));
+ependymoma  = createTissueSpecificModel(humanone_model, options);
+matfile = fullfile(pathname, 'ependymoma.mat');
+save(matfile, 'ependymoma');
