@@ -11,7 +11,7 @@ def save_obj(obj, name):
 
 
 def load_obj(name):
-    with open('../../obj/dicts/' + name + '.pkl', 'rb') as f:
+    with open('../../../obj/dicts/' + name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
 
