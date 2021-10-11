@@ -1,0 +1,364 @@
+---
+title: "PLS_DA"
+---
+
+```{r}
+library(mixOmics)
+# use subsystem library created in python
+library(reticulate)
+source_python("~/Documents/GitHub/metastasis/code/code_chunks/code_chunks.py")
+```
+
+```{r}
+# get sampling data from all three samples an combine it into dataframe
+brain <- read.csv('~/Documents/GitHub/metastasis/results/sampling/sampling_brain_metastasis_100.csv') 
+brain_l <- nrow(brain)
+brain$group <- c(rep('brain', brain_l))
+
+
+breast <- read.csv('~/Documents/GitHub/metastasis/results/sampling/sampling_breast_cancer_100.csv')  
+breast_l <- nrow(breast)
+breast$group <- c(rep('breast', breast_l))
+
+lung <- read.csv('~/Documents/GitHub/metastasis/results/sampling/sampling_lung_metastasis_100.csv') #%>% 
+lung_l <- nrow(lung)
+lung$group <- c(rep('lung', lung_l))
+
+common_react <- Reduce(intersect, list(colnames(lung),colnames(brain),colnames(breast)))
+# combine all matrices
+flux <- rbind(brain[common_react], breast[common_react], lung[common_react])
+
+```
+
+
+```{r}
+# get list of all documented subsystems in human1
+list_subsystem = list_subsystems()
+list_subsystem
+```
+
+
+```{r}
+# subset flux dataframe into reactions from subsystem
+plsda_for_subsystem <- function(subsystem, flux, ellipse_logical = TRUE){
+  # get reactions from subsystem using python function
+  reactions = subsystem_reactions(subsystem)
+  subsystem_data <- flux %>% 
+    as_data_frame() %>%
+    select_if(names(.) %in% reactions)
+  # create vector with groups
+  group <- flux$group
+
+  # normalize data
+  subsystem_data <- scale(subsystem_data, center=FALSE, scale=colSums(subsystem_data))
+
+  pls_result <- mixOmics::splsda(subsystem_data, group) 
+  plot <- plotIndiv(pls_result, legend = TRUE, ellipse = ellipse_logical, title = subsystem)
+  return(plot)
+}
+```
+
+
+```{r}
+plsda_for_subsystem("Acyl-CoA hydrolysis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Acylglycerides metabolism", flux)
+```
+
+
+```{r}
+plsda_for_subsystem("Alanine, aspartate and glutamate metabolism", flux)
+```
+
+
+```{r}
+plsda_for_subsystem("Alkaloids biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Amino sugar and nucleotide sugar metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Alanine, aspartate and glutamate metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Aminoacyl-tRNA biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Androgen metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Arachidonic acid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Arginine and proline metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Artificial reactions", flux)
+```
+
+```{r}
+plsda_for_subsystem("Ascorbate and aldarate metabolism", flux)
+```
+
+
+```{r}
+plsda_for_subsystem("Beta oxidation of branched-chain fatty acids (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("eta oxidation of di-unsaturated fatty acids (n-6) (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of di-unsaturated fatty acids (n-6) (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of even-chain fatty acids (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of even-chain fatty acids (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of odd-chain fatty acids (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of odd-chain fatty acids (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of phytanic acid (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of poly-unsaturated fatty acids (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of unsaturated fatty acids (n-7) (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of unsaturated fatty acids (n-7) (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of unsaturated fatty acids (n-9) (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta oxidation of unsaturated fatty acids (n-9) (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Beta-alanine metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Bile acid biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Bile acid recycling", flux)
+```
+
+```{r}
+plsda_for_subsystem("Biopterin metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Biotin metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Blood group biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Butanoate metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("C5-branched dibasic acid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Carnitine shuttle (cytosolic)", flux)
+```
+
+
+```{r}
+plsda_for_subsystem("Carnitine shuttle (endoplasmic reticular)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Carnitine shuttle (mitochondrial)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Carnitine shuttle (peroxisomal)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Cholesterol biosynthesis 1 (Bloch pathway)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Cholesterol biosynthesis 2", flux)
+```
+
+```{r}
+plsda_for_subsystem("Cholesterol biosynthesis 3 (Kandustch-Russell pathway)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Cholesterol metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Chondroitin / heparan sulfate biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Chondroitin sulfate degradation", flux)
+```
+
+```{r}
+plsda_for_subsystem("CoA catabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("CoA synthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Cysteine and methionine metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Dietary fiber binding", flux)
+```
+
+```{r}
+plsda_for_subsystem("Drug metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Eicosanoid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Estrogen metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Ether lipid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Exchange/demand reactions", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid activation (cytosolic)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid activation (endoplasmic reticular)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid biosynthesis (even-chain)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid biosynthesis (odd-chain)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid biosynthesis (unsaturated)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid desaturation (odd-chain)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid elongation (even-chain)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid elongation (odd-chain)", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fatty acid oxidation", flux)
+```
+
+```{r}
+plsda_for_subsystem("Folate metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Formation and hydrolysis of cholesterol esters", flux)
+```
+
+```{r}
+plsda_for_subsystem("Fructose and mannose metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Galactose metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Glucocorticoid biosynthesis", flux)
+```
+
+```{r}
+plsda_for_subsystem("Glutathione metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Glycerolipid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Glycerophospholipid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Glycine, serine and threonine metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Glycosphingolipid biosynthesis-ganglio series", flux)
+```
+
+```{r}
+plsda_for_subsystem("Ether lipid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Ether lipid metabolism", flux)
+```
+
+```{r}
+plsda_for_subsystem("Ether lipid metabolism", flux)
+```

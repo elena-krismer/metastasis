@@ -1,0 +1,119 @@
+---
+title: "Cluster Heatmap"
+output: html_document
+---
+```{r}
+library(scales)
+```
+
+
+```{r}
+data <- read_delim("../../../data/clustering/clusterdata_5.csv", delim = ";")
+data$`Brain tissue` <- gsub(",", ".", data$`Brain tissue`) %>% as.numeric()
+data$Glioblastoma <- gsub(",", ".", data$Glioblastoma) %>% as.numeric()
+```
+```{r}
+row <- data$System
+mat <- data[,4:9] %>% as.matrix()
+rownames(mat) <- row
+pheatmap(mat)
+# scale data row wise 
+mat_scale <- apply(mat, 1, rescale)
+pheatmap(mat_scale %>% t())
+```
+
+
+```{r}
+row <- data$System
+mat <- data[,4:9] %>% as.matrix()
+rownames(mat) <- row
+pheatmap(mat)
+# scale data row wise 
+mat_scale <- apply(mat, 1, rescale)
+pheatmap(mat_scale %>% t())
+```
+
+"'LIPIDS METABOLSIM'"
+"'ENERGY METABOLSIM'"
+"'NUCLEOTIDE METABOLSIM'"
+"'CARBOHYDRATES METABOLSIM'"
+"'GLYCAN METABOLSIM'"
+"'VITAMIN & COFACTOR METABOLSIM'"
+"'AMINO ACIDS METABOLSIM'"
+```{r}
+vitamin_df <- data[data$System == "VITAMIN & COFACTOR METABOLISM", ]
+vitamin_label <- vitamin_df$Description
+mat <- vitamin_df[,4:9] %>% as.matrix()
+rownames(mat) <- vitamin_label
+# scale data row wise 
+mat_scale <- apply(mat, 1, rescale)
+pheatmap(mat_scale %>% t())
+```
+
+```{r}
+
+cluster_system <- function(data, system){
+  df <- data[data$System == system, ]
+  label <- df$Description
+  mat <- df[,4:9] %>% as.matrix()
+  rownames(mat) <- label
+  pheatmap(mat, main = system)
+  # scale data row wise 
+  #mat_scale <- apply(mat, 1, rescale)
+  #pheatmap(mat_scale %>% t())
+}
+```
+
+
+```{r}
+cluster_system(data, "GLYCAN METABOLISM" )
+```
+
+```{r}
+cluster_system(data, "VITAMIN & COFACTOR METABOLISM")
+```
+
+```{r}
+cluster_system(data, "LIPIDS METABOLISM")
+```
+
+```{r}
+cluster_system(data,"AMINO ACIDS METABOLISM")
+```
+
+```{r}
+cluster_system(data, "CARBOHYDRATES METABOLISM")
+```
+
+```{r}
+cluster_system(data, "NUCLEOTIDE METABOLISM")
+```
+
+```{r}
+cluster_system(data, "ENERGY METABOLISM" )
+```
+
+
+
+
+
+
+```{r}
+aa_df <- data[data$System == "GLYCAN METABOLISM", ]
+aa_label <- aa_df$Description
+mat <- aa_df[,4:8] %>% as.matrix()
+rownames(mat) <- aa_label
+# scale data row wise 
+mat_scale <- apply(mat, 1, rescale)
+pheatmap(mat_scale %>% t())
+```
+
+```{r}
+aa_df <- data[data$System == "GLYCAN METABOLISM", ]
+aa_label <- aa_df$Description
+mat <- aa_df[,4:8] %>% as.matrix()
+rownames(mat) <- aa_label
+# scale data row wise 
+mat_scale <- apply(mat, 1, rescale)
+pheatmap(mat_scale %>% t())
+```

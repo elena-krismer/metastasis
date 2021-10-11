@@ -48,4 +48,5 @@ def html_table(reaction_list):
     string_table += "</tr></table>"
     return str(string_table)
 
+
 #print(get_reaction_description("MAR04693"))

@@ -5,10 +5,10 @@ account: elena-krismer
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4657177
-bundleId: 5051194
+bundleId: 5121180
 url: https://elena-krismer.shinyapps.io/plsda_shiny/
-when: 1632133234.67174
-lastSyncTime: 1632133234.67175
+when: 1633770297.44155
+lastSyncTime: 1633770297.44156
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .RData

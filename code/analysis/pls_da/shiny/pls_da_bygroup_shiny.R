@@ -6,6 +6,7 @@ library(dbplyr)
 library(dplyr)
 library(glue)
 library(tidyverse)
+library(stats)
 
 source_python("code_chunks.py")
 
@@ -125,7 +126,7 @@ ttest_results <- function(groups_list, reaction, flux) {
   html_output <- glue("<title>{reaction} T-test comparison </title><br>")
   for (group1 in groups_list) {
     for (group2 in groups_list) {
-      comparisongroups <- glue("{group1} vs. {group2}<br>")
+      comparisongroups <- glue("{group1} vs {group2}<br>")
       sample1 <- flux[flux$group == group1, ]
       sample2 <- flux[flux$group == group2, ]
       # ttest remove group names
@@ -138,6 +139,22 @@ ttest_results <- function(groups_list, reaction, flux) {
   return(HTML(html_output))
 }
 
+###############################################################################
+# get bounds
+###############################################################################
+
+get_bounds <- function(groups_list, reaction, flux) {
+  flux <- flux[, colnames(flux) %in% c(reaction, "group")] %>% as.data.frame()
+  html_output <- glue("<title>{reaction} Lower and Upperbound </title><br>")
+  for (group in groups_list) {
+      comparison <- glue("{group}<br>")
+      lower_bound <-  stats::quantile(as.vector(unlist(flux[flux$group == group, ][1])), probs = 0.25) %>% unname() %>% toString()
+      upper_bound <- stats::quantile(as.vector(unlist(flux[flux$group == group, ][1])), probs = 0.75) %>% unname() %>% toString()
+      results_string <- glue("<p>Lower Bound: {lower_bound} <span class='tab'></span> Upper Bound:{upper_bound}<p> <br><br>")
+      html_output <- paste(html_output, comparison, results_string)
+  }
+  return(HTML(html_output))
+}
 
 ###############################################################################
 # Shiny
@@ -197,6 +214,7 @@ ui <- fluidPage(
         tabPanel(
           "Paired T-test", h5(strong(textOutput("ttestheader"))), textOutput("humanoneids"),
           textInput("reaction_ttest", "Reaction", "MAR00193"),
+          htmlOutput("bounds"),
           htmlOutput("ttest_result", height = 800, width = 1600)
         )
       )
@@ -305,6 +323,9 @@ server <- function(input, output, session) {
     ttestheader()
   })
   output$humanoneids <- renderText(reaction_list())
+  output$bounds <- renderUI({
+    get_bounds(groups_list = input$group, reaction = input$reaction_ttest, flux = flux)
+  })
   output$ttest_result <- renderUI({
     ttest_results(groups_list = input$group, reaction = input$reaction_ttest, flux = flux)
   })
