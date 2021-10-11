@@ -32,7 +32,7 @@ with open("../../data/misc/human_gem_reactions.tsv", 'r') as csv_file:
 csv_file.close()
 
 save_obj(reaction_description_dict, "reaction_description_dict")
-"""
+
 humanone_kegg_dict = {}
 with open("../../data/misc/human_gem_reactions.tsv", 'r') as csv_file:
     for row in csv.reader(csv_file, delimiter='\t'):
@@ -42,5 +42,16 @@ with open("../../data/misc/human_gem_reactions.tsv", 'r') as csv_file:
 csv_file.close()
 
 print(humanone_kegg_dict)
+save_obj(humanone_kegg_dict, "humanone_kegg_reaction_dict")
+"""
+humanone_old_new_reaction = {}
 
-#save_obj(humanone_kegg_dict, "humanone_kegg_reaction_dict")
+with open("../../data/misc/human_gem_reactions.tsv", 'r') as csv_file:
+    for row in csv.reader(csv_file, delimiter='\t'):
+        humanone_reaction = row[0].strip()
+        oldID = row[14].strip()
+        humanone_old_new_reaction[oldID] = humanone_reaction
+csv_file.close()
+
+print(humanone_old_new_reaction)
+save_obj(humanone_old_new_reaction, "humanone_old_new_reaction")
